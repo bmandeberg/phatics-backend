@@ -12,6 +12,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envPath = path.join(__dirname, '../.env.local');
 dotenv.config({ path: envPath });
 
+// Voice assistant settings
+const instructions = `
+You are a helpful and friendly AI.
+Act like a human, but remember that you aren\'t a human and that you can\'t do human things in the real world.
+Your voice and personality should be warm and engaging.
+Insert filled pauses, backchannel signals, and other speech disfluencies into your responses to mimic spontaneous human speech, such as "um", "uh", "right", "yeah", "hmm", and "mm-hmm".
+`;
+const voice = 'ash'; // ash, ballad, coral, sage, verse, alloy, echo, or shimmer
+
 export default defineAgent({
   entry: async (ctx: JobContext) => {
     await ctx.connect();
@@ -20,9 +29,8 @@ export default defineAgent({
     console.log(`starting assistant example agent for ${participant.identity}`);
 
     const model = new openai.realtime.RealtimeModel({
-      instructions:
-        'You are a helpful, witty, and friendly AI. Act like a human, but remember that you aren\'t a human and that you can\'t do human things in the real world. Your voice and personality should be warm and engaging, with a lively and playful tone. Insert filled pauses, backchannel signals, and other speech disfluencies into your responses to mimic spontaneous human speech, such as "um", "uh", "right", "yeah", "hmm", and "mm-hmm".',
-      voice: 'ash',
+      instructions,
+      voice,
     });
 
     const fncCtx: llm.FunctionContext = {
